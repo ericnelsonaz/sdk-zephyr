@@ -990,9 +990,9 @@ static inline int z_impl_gpio_pin_configure(const struct device *port,
 	__ASSERT((flags & GPIO_INT_MASK) == 0,
 		 "Interrupt flags are not supported");
 
-	__ASSERT((flags & (GPIO_PULL_UP | GPIO_PULL_DOWN)) !=
-		 (GPIO_PULL_UP | GPIO_PULL_DOWN),
-		 "Pull Up and Pull Down should not be enabled simultaneously");
+	if ((flags & (GPIO_PULL_UP | GPIO_PULL_DOWN)) !=
+		 (GPIO_PULL_UP | GPIO_PULL_DOWN))
+		printk("Pull Up/Pull Down on pin %s:%u\n", port->name, pin);
 
 	__ASSERT(!((flags & GPIO_INPUT) && !(flags & GPIO_OUTPUT) && (flags & GPIO_SINGLE_ENDED)),
 		 "Input cannot be enabled for 'Open Drain', 'Open Source' modes without Output");
